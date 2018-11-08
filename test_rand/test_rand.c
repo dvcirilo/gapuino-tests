@@ -1,6 +1,5 @@
 // PRINTF
 #include "gap_common.h"
-#include <pthread.h>
 
 // FEATURE_CLUSTER
 #include "gap_cluster.h"
@@ -11,8 +10,9 @@
 
 void Hello(void *arg) {
     int i;
+    unsigned int seed=10;
     for(i=0;i<5;i++)
-        printf("Hello World #%d from cluster core %d! - rand: %d\n", i, __core_ID(), rand());
+        printf("Hello World #%d from cluster core %d! - rand: %d\n", i, __core_ID(), rand_r(&seed));
 }
 
 void Master_Entry(void *arg) {
