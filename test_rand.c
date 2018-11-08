@@ -23,7 +23,6 @@ int main()
 {
     srand(10);
     printf("Fabric controller code execution for mbed_os Cluster Power On test\n");
-    /*printf("Test %d %b\n",__core_ID(),CLUSTER_GetCoreMask());*/
     printf("Test %d %b\n",__core_ID(),4);
 
     /* Cluster Start - Power on */
