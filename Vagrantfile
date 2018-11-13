@@ -7,6 +7,8 @@ VAGRANT_BOX = "ubuntu/xenial64"
 # Memorable name for your
 VM_NAME = 'gapuino'
 
+ENV["LC_ALL"] = "en_US.UTF-8"
+
 Vagrant.configure("2") do |config|
   config.vm.box = VAGRANT_BOX
   config.vm.hostname = VM_NAME
