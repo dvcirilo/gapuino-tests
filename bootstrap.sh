@@ -1,11 +1,11 @@
 #!/bin/bash
 
-apt update
-apt dist-upgrade -y
-apt install -y build-essential git libftdi-dev libftdi1 doxygen python3-pip libsdl2-dev curl cmake libusb-1.0-0-dev
+apt-get update
+apt-get dist-upgrade -y
+apt-get install -y build-essential git libftdi-dev libftdi1 doxygen python3-pip libsdl2-dev curl cmake libusb-1.0-0-dev
 ln -s /usr/bin/libftdi-config /usr/bin/libftdi1-config
 curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
-apt install git-lfs
+apt-get install git-lfs
 git lfs install
 pip3 install pyelftools
 usermod -a -G dialout vagrant
