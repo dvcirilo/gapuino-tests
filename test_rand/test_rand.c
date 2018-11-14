@@ -5,17 +5,18 @@
 #include "gap_cluster.h"
 #include "gap_dmamchan.h"
 #include <stdlib.h>
-/*#include <time.h>*/
+#include <time.h>
 #include "hal/us_ticker_api.h"
 
 #define CORE_NUMBER      8
+#define BILLION 1000000000L
 
 void random_gen(void *arg) {
     int i;
     unsigned int seed=10;
     if(__core_ID() == 4)
         seed = 12;
-    for(i=0;i<100000;i++)
+    for(i=0;i<1000000;i++)
         rand_r(&seed);
     printf("%d\t%d\n", __core_ID(), rand_r(&seed));
 }
@@ -32,34 +33,39 @@ uint32_t current_voltage(void)
 int main()
 {
     int set_voltage_return;
+    /*struct timespec start, end;*/
 
-    printf("Default FC Frequency      = %d Hz\n", FLL_GetFrequency(uFLL_SOC));
-    printf("voltage: %lu\n", current_voltage());
+    printf("Default FC Frequency      = %d kHz\n", FLL_GetFrequency(uFLL_SOC)/1000);
+    printf("Voltage: %lu\n", current_voltage());
 
     /* Set voltage */
-    set_voltage_return = PMU_SetVoltage(1000,0);
+    set_voltage_return = PMU_SetVoltage(1100,0);
     if (set_voltage_return) {
         printf("Failed to change voltage! Code: %d\n",set_voltage_return);
     }
-    printf("Voltage: %lu - FCMaxFreq: %d - FCMaxFreq: %d\n", current_voltage(),FLL_SoCMaxFreqAtV(current_voltage()),FLL_ClusterMaxFreqAtV(current_voltage()));
+    printf("Voltage: %lu - FCMaxFreq: %d kHz - FCMaxFreq: %d kHz\n",
+            current_voltage(),FLL_SoCMaxFreqAtV(current_voltage())/1000,
+            FLL_ClusterMaxFreqAtV(current_voltage())/1000);
 
     /* Set frequency */
     if (FLL_SetFrequency(uFLL_SOC, 100000000 , 0) == -1) {
         printf("Error of changing frequency, check Voltage value!\n");
     }
-    printf("FC Freq: %d Hz - Voltage: %lu mV\n", FLL_GetFrequency(uFLL_SOC),current_voltage());
+    printf("FC Freq: %d kHz - Voltage: %lu mV\n",
+            FLL_GetFrequency(uFLL_SOC)/1000,current_voltage());
     random_gen(NULL);
 
-    unsigned long begin_ms = us_ticker_read();
+    /*clock_gettime(CLOCK_REALTIME, &start);*/
 
     /* Cluster Start - Power on */
     CLUSTER_Start(0, CORE_NUMBER);
 
     /* Set frequency */
-    if (FLL_SetFrequency(uFLL_CLUSTER, 200000000 , 0) == -1) {
+    if (FLL_SetFrequency(uFLL_CLUSTER, 2850000, 0) == -1) {
         printf("Error of changing frequency, check Voltage value!\n");
     }
-    printf("Cluster Freq: %d Hz - Voltage: %lu mV\n", FLL_GetFrequency(uFLL_CLUSTER),current_voltage());
+    printf("Cluster Freq: %d kHz - Voltage: %lu mV\n",
+            FLL_GetFrequency(uFLL_CLUSTER)/1000,current_voltage());
 
     /* FC send a task to Cluster */
     CLUSTER_SendTask(0, Master_Entry, 0, 0);
@@ -67,8 +73,8 @@ int main()
     /* Cluster Stop - Power down */
     CLUSTER_Stop(0);
 
-    unsigned long end_ms = us_ticker_read();
-    printf("elapsed: %lu us\n", end_ms-begin_ms);
+    /*clock_gettime(CLOCK_REALTIME, &end);*/
+    /*printf("elapsed: %llu us\n", BILLION * (end.tv_sec - start.tv_sec) + end.tv_nsec - start.tv_nsec);*/
 
 
     /* Check read values */
