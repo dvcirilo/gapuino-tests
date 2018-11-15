@@ -4,9 +4,13 @@
 # Box / OS
 VAGRANT_BOX = "ubuntu/xenial64"
 
-# Memorable name for your
+# Memorable name for your VM
 VM_NAME = 'gapuino'
 
+# Ubuntu box generates a log file
+LOG_FILE = ".vagrant/ubuntu-xenial-16.04-cloudimg-console.log"
+
+# Prevents errors as the machine already has en_US configured
 ENV["LC_ALL"] = "en_US.UTF-8"
 
 Vagrant.configure("2") do |config|
@@ -22,7 +26,7 @@ Vagrant.configure("2") do |config|
     vb.customize ['usbfilter', 'add', '0', '--target', :id, '--name', 'ESP',
                   '--vendorid', '0x0403', '--productid', '0x6010']
     vb.customize [ "modifyvm", :id, "--uartmode1", "file",
-                   File.join(Dir.pwd, ".vagrant/ubuntu-xenial-16.04-cloudimg-console.log") ]
+                   File.join(Dir.pwd, LOG_FILE) ]
   end
   # Script that installs the software needed
   config.vm.provision :shell, path: "bootstrap.sh"
