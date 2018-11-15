@@ -8,7 +8,3 @@ MBED_FLAGS     +=-DJENKINS_TEST_FLAG=1
 PLPBRIDGE_FLAGS +=-v 1
 
 include $(GAP_SDK_HOME)/tools/rules/mbed_rules.mk
-
-tags:
-	$(CC) -M $* | sed -e 's/[\\ ]/\n/g' | \
-	sed -e '/^$/d' -e '/\.o:[ \t]*$/d' | ctags -RL - --c++-kinds=+p --fields=+iaS --extra=+q
