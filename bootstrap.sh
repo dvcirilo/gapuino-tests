@@ -9,6 +9,7 @@ toolchain_dir="/usr/lib/gap_riscv_toolchain"
 # GAP SDK
 sdk_repo="https://github.com/GreenWaves-Technologies/gap_sdk.git"
 sdk_dir="/opt/gap_sdk"
+autotiler_url="https://greenwaves-technologies.com/autotiler/"
 
 # Update, upgrade and install dependencies
 apt-get update && apt-get dist-upgrade -y
@@ -46,6 +47,10 @@ cd $sdk_dir
 git submodule update --init --recursive
 source sourceme.sh
 make all
+
+# Configure the autotiler (it's a HACK!)
+echo $autotiler_url >> $sdk_dir/tools/autotiler/.tiler_url
+make autotiler
 
 # .bashrc settings
 # Source to add gap_sdk env
