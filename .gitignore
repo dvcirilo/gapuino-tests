@@ -1,3 +1,5 @@
 BUILD
 .vagrant*
 tags
+examples/*
+!examples/.keep
