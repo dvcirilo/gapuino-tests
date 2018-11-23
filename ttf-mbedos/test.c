@@ -12,10 +12,7 @@ void random_gen(void *arg)
 {
     int *L1_mem = (int *)arg;
     unsigned int seed=SEED;
-    /*if(__core_ID() == 4)*/
-        /*seed = 12;*/
-    for(int i=0;i<RUNS;i++)
-        rand_r(&seed);
+    rand_r(&seed);
     L1_mem[__core_ID()] = rand_r(&seed);
     /*printf("%d\t%d\n", __core_ID(), L1_mem[__core_ID()]);*/
 }
@@ -39,12 +36,17 @@ void test_frequency(int *L1_mem)
         }
 
         /* FC send a task to Cluster */
-        CLUSTER_SendTask(0, Master_Entry, (void *) L1_mem, 0);
-        CLUSTER_Wait(0);
-        if (L1_mem[0]^L1_mem[1]^L1_mem[2]^L1_mem[3]^L1_mem[4]^L1_mem[5]^L1_mem[6]^L1_mem[7]){
-            printf("Diff at: Cluster Freq: %d MHz - Voltage: %lu mV\n",
-                    FLL_GetFrequency(uFLL_CLUSTER)/F_DIV,current_voltage());
-            break;
+        for(int i=0;i<RUNS;i++) {
+            CLUSTER_SendTask(0, Master_Entry, (void *) L1_mem, 0);
+            CLUSTER_Wait(0);
+            if (L1_mem[0]^L1_mem[1]^L1_mem[2]^L1_mem[3]^L1_mem[4]^L1_mem[5]^L1_mem[6]^L1_mem[7]){
+                printf("Diff at: Cluster Freq: %d MHz - Voltage: %lu mV\n",
+                        FLL_GetFrequency(uFLL_CLUSTER)/F_DIV,current_voltage());
+                break;
+            } else {
+                /*printf("Pass %d\n", i);*/
+            
+            }
         }
     }
 }
