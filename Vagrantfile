@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
     # Passing the USB port of Gapuino to VM 
     # Check on host with "VBoxManage list usbhost"
     # VendorId: 0x0403 and ProductId: 0x6010
-    vb.customize ["modifyvm", :id, "--usb", "on"]
+    vb.customize ["modifyvm", :id, "--usbxhci", "on"]
     vb.customize ['usbfilter', 'add', '0', '--target', :id, '--name', 'ESP',
                   '--vendorid', '0x0403', '--productid', '0x6010']
     vb.customize [ "modifyvm", :id, "--uartmode1", "file",

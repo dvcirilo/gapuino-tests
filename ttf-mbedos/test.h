@@ -8,8 +8,8 @@
 #define F_MIN         (250000000)
 #define F_STEP        (5000000)
 #define F_DIV         (1000000)
-#define RUNS          (10)
-#define NUM_TESTS     (100)
+#define RUNS          (1000000)
+#define NUM_TESTS     (1000)
 
 void random_gen(void *arg);
 
@@ -17,6 +17,5 @@ void Master_Entry(int *L1_mem);
 
 uint32_t current_voltage(void);
 
-void test_frequency(int *L1_mem);
+void test_rand(int *L1_mem, int frequency, int voltage);
 
-void test_voltage(int *L1_mem);
