@@ -14,7 +14,8 @@ autotiler_url="https://greenwaves-technologies.com/autotiler/"
 # Update, upgrade and install dependencies
 apt-get update && apt-get dist-upgrade -y
 apt-get install -y build-essential git libftdi-dev libftdi1 doxygen\
-                   python3-pip libsdl2-dev curl cmake libusb-1.0-0-dev
+                   python3-pip libsdl2-dev curl cmake libusb-1.0-0-dev\
+                   exuberant-ctags
 curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
 apt-get install git-lfs
 git lfs install
