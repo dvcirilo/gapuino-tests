@@ -1,0 +1,50 @@
+    CC  test.c
+riscv32-unknown-elf-objdump -D /vagrant/ttf-single-mbedos/BUILD/GAP8/GCC_RISCV/test > /vagrant/ttf-single-mbedos/BUILD/GAP8/GCC_RISCV/test.s
+/opt/gap_sdk/tools/runner/run_gapuino.sh -v 1
+
+
+[32m          ,ad8888ba,        db        88888888ba  [0m ad88888ba   
+[32m         d8"'    `"8b      d88b       88      "8b[0m d8"     "8b  
+[32m        d8'               d8'`8b      88      ,8P[0m Y8a     a8P  
+[32m        88               d8'  `8b     88aaaaaa8P' [0m "Y8aaa8P"   
+[32m        88      88888   d8YaaaaY8b    88""""""'  [0m  ,d8"""8b,   
+[32m        Y8,        88  d8""""""""8b   88       [0m   d8"     "8b  
+[32m         Y8a.    .a88 d8'        `8b  88        [0m  Y8a     a8P  
+[32m          `"Y88888P" d8'          `8b 88         [0m  "Y88888P"   [0m
+
+---------------------------------GAPUINO------------------------------------
+
+Cable state change connected
+Bridge init - log level 0
+FC Frequency: 149 MHz - Voltage: 1200 mV
+Done generating table for seed = 10
+Voltage: 1000 - FCMaxFreq: 150 MHz - ClusterMaxFreq: 87 MHz
+Set: Cluster Freq: 224 MHz - Voltage: 1000 mV
+0,0,0x34e29086,0x00029086
+156,93590,0x744d6831,0x746d6831
+103,61596,0x26a23332,0x71c23333
+156,93590,0x744d6831,0x746d6831
+131,78458,0x4664a73b,0x1184a73b
+0,0,0x34e29086,0x00029086
+5,3048,0x6907d20c,0x3427d20c
+0,0,0x34e29086,0x00029086
+74,44455,0x732c1eed,0x734c1eed
+38,22877,0x21c912a7,0x21e912a7
+74,44455,0x732c1eed,0x734c1eed
+157,93590,0x744d6831,0x746d6831
+0,0,0x34e29086,0x00029086
+0,0,0x34e29086,0x00029086
+157,93590,0x744d6831,0x746d6831
+156,93590,0x744d6831,0x746d6831
+91,54367,0x0fbf5062,0x5adf5063
+38,22877,0x21c912a7,0x21e912a7
+10,6524,0x08da93f9,0x53fa93fa
+38,22877,0x21c912a7,0x21e912a7
+156,93590,0x744d6831,0x746d6831
+0,0,0x34e29086,0x00029086
+74,44455,0x732c1eed,0x734c1eed
+10,6524,0x08da93f9,0x53fa93fa
+74,44455,0x732c1eed,0x734c1eed
+success: 9975 - fail: 25
+Test success
+commands completed
