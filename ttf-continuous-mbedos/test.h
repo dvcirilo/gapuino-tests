@@ -9,7 +9,7 @@
 #define F_STEP        (5000000)
 #define F_DIV         (1000000)
 #define RUNS          (100000)
-#define NUM_TESTS     (10000)
+#define NUM_TESTS     (100)
 
 #define TIMER TIMER1
 
@@ -19,5 +19,5 @@ void Master_Entry(int *L1_mem);
 
 uint32_t current_voltage(void);
 
-void test_rand(unsigned int *L1_mem, int frequency, int voltage);
+void test_rand(int frequency, int voltage);
 
