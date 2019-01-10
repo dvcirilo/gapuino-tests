@@ -36,7 +36,7 @@ void test_rand(int frequency, int voltage)
 {
     int set_voltage_return, error=0, time_ms;
     int success_counter=0, failure_counter=0;
-    int total_time=0, calls=0;
+    int total_time=0, calls=0, call_total=0;
 
     unsigned int *L1_mem = L1_Malloc(CORE_NUMBER*sizeof(unsigned int));
 
@@ -45,7 +45,7 @@ void test_rand(int frequency, int voltage)
     if (set_voltage_return) {
         printf("Failed to change voltage! Code: %d\n",set_voltage_return);
     }
-    printf("Voltage: %lu - FCMaxFreq: %d MHz - ClusterMaxFreq: %d MHz\n",
+    printf("Voltage: %lu - FCMaxFreq: %d kHz - ClusterMaxFreq: %d kHz\n",
             current_voltage(),FLL_SoCMaxFreqAtV(current_voltage())/F_DIV,
             FLL_ClusterMaxFreqAtV(current_voltage())/F_DIV);
 
@@ -53,13 +53,14 @@ void test_rand(int frequency, int voltage)
     if (FLL_SetFrequency(uFLL_CLUSTER, frequency, 0) == -1) {
         printf("Error of changing frequency, check Voltage value!\n");
     } else {
-        printf("Set: Cluster Freq: %d MHz - Voltage: %lu mV\n",
+        printf("Set: Cluster Freq: %d kHz - Voltage: %lu mV\n",
                 FLL_GetFrequency(uFLL_CLUSTER)/F_DIV,current_voltage());
     }
 
-    __disable_irq();
+    /* Resets and initialize TIMER (on FC) */
     Timer_Initialize(TIMER, 0);
     Timer_Enable(TIMER);
+
     /* Runs NUM_TESTS tests. Each test with RUNS calls to random_gen() */
     for(int j=0;j<NUM_TESTS;j++) {
         initialize_seeds(L1_mem, CORE_NUMBER, (unsigned int) SEED);
@@ -76,6 +77,7 @@ void test_rand(int frequency, int voltage)
                 printf("%d,%d,0x%08x,0x%08x,%d,%d\n", time_ms, calls,
                         L1_mem[CORE_NUMBER-1], rand_values[i],
                         failure_counter,success_counter);
+                call_total += calls;
                 calls = 0;
                 Timer_Initialize(TIMER, 0);
                 Timer_Enable(TIMER);
@@ -85,10 +87,13 @@ void test_rand(int frequency, int voltage)
             }
         }
     }
+    call_total += calls;
+    time_ms = (int)(Timer_ReadCycle(TIMER) 
+                / (FLL_GetFrequency(uFLL_SOC)/1000));
+    total_time += time_ms;
     Timer_Disable(TIMER);
-    __enable_irq();
-    printf("success: %d - fail: %d - total time: %dms\n",
-            success_counter, failure_counter, total_time);
+    printf("success: %d - fail: %d - total: %d - total time: %dms\n",
+            success_counter, failure_counter, call_total, total_time);
 }
 
 int main()
@@ -96,7 +101,7 @@ int main()
     /* Initialize FC Clock */
     FLL_SetFrequency(uFLL_SOC, FC_FREQ, 1);
 
-    printf("FC Frequency: %d MHz - Voltage: %lu mV\n",
+    printf("FC Frequency: %d kHz - Voltage: %lu mV\n",
             FLL_GetFrequency(uFLL_SOC)/F_DIV, current_voltage());
 
     /* Create a vector on L2 with 10k values of rand */
@@ -111,7 +116,7 @@ int main()
     CLUSTER_Start(0, CORE_NUMBER);
 
 
-    test_rand(223000000, 1000);
+    test_rand(226000000, 1000);
 
     /* Cluster Stop - Power down */
     CLUSTER_Stop(0);
