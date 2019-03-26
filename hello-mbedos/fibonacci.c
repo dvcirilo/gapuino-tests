@@ -4,9 +4,9 @@
 
 int main()
 {
-    int i, n = 100, t1 = 0, t2 = 1, nextTerm;
+    int i, n = 10, t1 = 0, t2 = 1, nextTerm;
 
-    printf("Fibonacci Series: \n");
+    printf("Fibonacci Series: ");
 
     for (i = 1; i <= n; ++i)
     {
