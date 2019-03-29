@@ -11,7 +11,7 @@ int main( void )
 {
     printf("Fabric controller code execution for mbed_os GPIO \n");
 
-    PinName led = GPIO_A17;
+    PinName led = GPIO_A4_A44;
 
     /* Parsing GPIO pin to get real number for port, gpio and pin*/
     uint32_t port_number = GET_GPIO_PORT(led);
