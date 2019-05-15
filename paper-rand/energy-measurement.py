@@ -31,13 +31,14 @@ while True:
     m = em.getMeasurement(M_POINT)
     output = ''
     title = ''
-    for attr, value in m.__dict__.iteritems():
-        title = title + attr + ','
-        output = output + str(value) + ','
-    if (first):
-        print title[:-1]
-        first = False
-    print datetime.now().strftime('%Y-%m-%d %H:%M:%S') + output[:-1]
+    # for attr, value in m.__dict__.iteritems():
+        # title = title + attr + ','
+        # output = output + str(value) + ','
+    # if (first):
+        # print title[:-1]
+        # first = False
+    # print datetime.now().strftime('%Y-%m-%d %H:%M:%S') + output[:-1]
+    print datetime.now().strftime('%Y-%m-%d %H:%M:%S') + ',' + str(m.time) + ',' + str(m.energy) + ',' + str(m.avg_power)
     sys.stdout.flush()
     # print em.measurement_params[M_POINT]
 
