@@ -17,6 +17,7 @@ em.measurement_params[1]['vref'] = 2.946
 
 em.enableMeasurementPoint(M_POINT)
 first = True
+print "timestamp,time,energy,avg_power"
 while True:
     em.setTrigger("PA0", 1)
 

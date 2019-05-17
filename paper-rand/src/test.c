@@ -87,42 +87,56 @@ int main()
     CLUSTER_Start(0, CORE_NUMBER);
 
 
-    printf("set_freq,meas_freq,success,fail,total,time\n");
+    printf("set_freq,meas_freq,success,fail,total,voltage\n");
 
-    int time = 100, timer;
-    int fmax, fstep, freq = 220000000;
-    fmax = 230000000;
+    int time, timer;
+    int fmax, fstep, freq;
+    int vmax, vstep, voltage;
+
+    freq = 120000000;
+    fmax = 224000000;
     fstep = 1000000;
-    while (freq <= fmax) {
-        freq = freq + fstep;
-        set_voltage_current(freq, 1000, false);
 
-        /* Set trigger */
-        set_pin(trigger,1);
+    voltage = 1200;
+    vmax = 1200;
+    vstep = 50;
+    while (freq < fmax) {
+    /*while (voltage < vmax) {*/
+        freq += fstep;
+        /*voltage += vstep;*/
+        if(set_voltage_current(freq, voltage, false)){
+            printf("Failed to assign voltage\n");
+            break;
+        }
 
-        /* Resets and initialize TIMER (on FC) */
-        Timer_Initialize(TIMER, 0);
-        Timer_Enable(TIMER);
+        for (int i = 0; i < 10; i++) {
+            /* Set trigger */
+            set_pin(trigger,1);
 
-        /* Run call the test */
-        runs = test_rand(false);
+            /* Resets and initialize TIMER (on FC) */
+            /*Timer_Initialize(TIMER, 0);*/
+            /*Timer_Enable(TIMER);*/
 
-        /* Get TIMER (on FC) */
-        timer = (int)(Timer_ReadCycle(TIMER) 
-                    / (FLL_GetFrequency(uFLL_SOC)/1000));
-        Timer_Disable(TIMER);
+            /* Run call the test */
+            runs = test_rand(false);
 
-         /* Unset trigger */
-        set_pin(trigger,0);
+            /* Get TIMER (on FC) */
+            /*timer = (int)(Timer_ReadCycle(TIMER) */
+                        /*/ (FLL_GetFrequency(uFLL_SOC)/1000));*/
+            /*Timer_Disable(TIMER);*/
 
-        printf("%d,%d,%d,%d,%d,%d\n",
-                freq,FLL_GetFrequency(uFLL_CLUSTER),runs.success_counter, 
-                runs.failure_counter, runs.call_total, timer);
+             /* Unset trigger */
+            set_pin(trigger,0);
 
-        /* Delay to allow measurement */
-        time = 100;
-        while (time) {
-            osDelay(time--);
+            printf("%d,%d,%d,%d,%d,%d\n",
+                    freq,FLL_GetFrequency(uFLL_CLUSTER),runs.success_counter, 
+                    runs.failure_counter, runs.call_total, current_voltage());
+
+            /* Delay to allow measurement */
+            time = 100;
+            while (time) {
+                osDelay(time--);
+            }
         }
     }
 
