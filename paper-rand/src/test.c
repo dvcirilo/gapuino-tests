@@ -51,6 +51,10 @@ struct run_info test_rand(bool verbose)
                 success_counter++;
             }
         }
+
+        /* Breaks if failed */
+        if (failure_counter)
+            break;
     }
     call_total += calls;
     runs.success_counter = success_counter;
@@ -87,17 +91,17 @@ int main()
     CLUSTER_Start(0, CORE_NUMBER);
 
 
-    printf("set_freq,meas_freq,success,fail,total,voltage\n");
+    printf("set_freq,meas_freq,success,fail,total,voltage,time\n");
 
     int time, timer;
     int fmax, fstep, freq;
     int vmax, vstep, voltage;
 
-    freq = 120000000;
-    fmax = 224000000;
-    fstep = 1000000;
+    freq = 220000000;
+    fmax = 225000000;
+    fstep =  1000000;
 
-    voltage = 1200;
+    voltage = 1000;
     vmax = 1200;
     vstep = 50;
     while (freq < fmax) {
@@ -109,28 +113,28 @@ int main()
             break;
         }
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             /* Set trigger */
             set_pin(trigger,1);
 
             /* Resets and initialize TIMER (on FC) */
-            /*Timer_Initialize(TIMER, 0);*/
-            /*Timer_Enable(TIMER);*/
+            Timer_Initialize(TIMER, 0);
+            Timer_Enable(TIMER);
 
             /* Run call the test */
             runs = test_rand(false);
 
             /* Get TIMER (on FC) */
-            /*timer = (int)(Timer_ReadCycle(TIMER) */
-                        /*/ (FLL_GetFrequency(uFLL_SOC)/1000));*/
-            /*Timer_Disable(TIMER);*/
+            timer = (int)(Timer_ReadCycle(TIMER) 
+                        / (FLL_GetFrequency(uFLL_SOC)/1000));
+            Timer_Disable(TIMER);
 
              /* Unset trigger */
             set_pin(trigger,0);
 
-            printf("%d,%d,%d,%d,%d,%d\n",
+            printf("%d,%d,%d,%d,%d,%d,%d\n",
                     freq,FLL_GetFrequency(uFLL_CLUSTER),runs.success_counter, 
-                    runs.failure_counter, runs.call_total, current_voltage());
+                    runs.failure_counter, runs.call_total, current_voltage(),timer);
 
             /* Delay to allow measurement */
             time = 100;
