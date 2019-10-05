@@ -31,7 +31,7 @@ def main():
     plt.title(filename)
     plt.xlabel(x.name.title())
     plt.ylabel(y.name.title())
-    plt.savefig(filename.split('.')[0] + '.svg')
+    plt.savefig(filename.split('.')[0] + '_' + x_field + '_' + y_field + '.svg')
 
 if __name__ == '__main__':
     main()

@@ -2,15 +2,19 @@
 #include "gap_common.h"
 #include "gap_performance.h"
 
-performance_t perf;
 
 #define R_RUNS    (100000)
 #define P_RUNS    (1000)
 #define SEED      (10)
 #define FC_FREQ   (100000000)
 #define F_DIV     (1000000)
+
+/* Mask for selecting wich counter to save as there's only one register */
+/* Definition available at: $GAP_SDK_HOME/mbed-os/cmsis/TARGET_RISCV_32/core_gap.h */
 #define PERF_Msk PCER_INSTR_Msk
 #define PERF_Pos PCER_INSTR_Pos
+
+performance_t perf;
 
 void random_gen(void)
 {
@@ -19,6 +23,7 @@ void random_gen(void)
         rand();
 }
 
+/* Returns the current set SoC voltage */
 uint32_t current_voltage(void)
 {
     return DCDC_TO_mV(PMU_State.DCDC_Settings[READ_PMU_REGULATOR_STATE(PMU_State.State)]);

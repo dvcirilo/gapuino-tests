@@ -97,11 +97,11 @@ int main()
     int fmax, fstep, freq;
     int vmax, vstep, voltage;
 
-    freq = 220000000;
-    fmax = 225000000;
+    freq = 80000000;
+    fmax = 100000000;
     fstep =  1000000;
 
-    voltage = 1000;
+    voltage = 1200;
     vmax = 1200;
     vstep = 50;
     while (freq < fmax) {
@@ -113,7 +113,7 @@ int main()
             break;
         }
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1; i++) {
             /* Set trigger */
             set_pin(trigger,1);
 
